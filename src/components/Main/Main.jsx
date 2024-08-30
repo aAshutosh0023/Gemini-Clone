@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "./Main.css";
 import { assets } from "../../assets/assets";
 import { Context } from "../../context/Context";
@@ -14,17 +14,26 @@ function Main() {
     input,
   } = useContext(Context);
 
+  const [cardClicked, setCardClicked] = useState(false);
+
+  const handleCardClick = (text) => {
+    setInput(text);  // Set the card's text as input
+    setCardClicked(true);  // Mark that a card was clicked
+  };
+
+  useEffect(() => {
+    if (cardClicked) {
+      onSent();  // Call onSent after the input state is updated
+      setCardClicked(false);  // Reset the cardClicked state
+    }
+  }, [cardClicked, input]);  // Trigger useEffect when cardClicked or input changes
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault(); 
       onSent(); 
+    }
   };
-}
-
-const handleCardClick = (text) => {
-   setInput(text);  // Set the card's text as input
-   onSent();  // Trigger the search
- };
 
   return (
     <div className="main">
@@ -37,25 +46,25 @@ const handleCardClick = (text) => {
           <>
             <div className="greet">
               <p>
-                <span>Hello,Bro</span>
+                <span>Hello,Greetings!</span>
               </p>
-              <p>How can i help you today?</p>
+              <p>How can I help you today?</p>
             </div>
             <div className="cards">
-              <div className="card">
-                <p>Suggest beautiful places to see on an upcoming road trip.</p>
+              <div className="card" onClick={() => handleCardClick("Suggest good places to see on an upcoming road trip.")}>
+                <p>Suggest good places to see on an upcoming road trip.</p>
                 <img src={assets.compass_icon} alt="" />
               </div>
-              <div className="card">
-                <p>Tell me how can i increase productivity?</p>
+              <div className="card" onClick={() => handleCardClick("Tell me how can I increase productivity?")}>
+                <p>Tell me how can I increase productivity?</p>
                 <img src={assets.bulb_icon} alt="" />
               </div>
-              <div className="card">
-                <p>Suggest me some good recepies without oil.</p>
+              <div className="card" onClick={() => handleCardClick("Suggest me some good recipes without oil.")}>
+                <p>Suggest me some good recipes without oil.</p>
                 <img src={assets.message_icon} alt="" />
               </div>
-              <div className="card">
-                <p>Write the code for the two number swap without using third in c++.</p>
+              <div className="card" onClick={() => handleCardClick("Give me a list of top 10 best musicians of all time.")}>
+                <p>Give me a list of top 10 best musicians of all time.</p>
                 <img src={assets.code_icon} alt="" />
               </div>
             </div>
@@ -90,7 +99,6 @@ const handleCardClick = (text) => {
               placeholder="Enter a prompt here."
               onKeyDown={handleKeyDown}
             />
-
             <div>
               <img src={assets.gallery_icon} alt="" />
               <img src={assets.mic_icon} alt="" />
@@ -101,7 +109,7 @@ const handleCardClick = (text) => {
           </div>
           <p className="bottom-info">
             Gemini may display inaccurate info, including about people, so
-            double-check its responses.Your privacy and Gemini App
+            double-check its responses.Your privacy is our responsibility.
           </p>
         </div>
       </div>
@@ -109,4 +117,4 @@ const handleCardClick = (text) => {
   );
 }
 
-export default Main;
+export default Main; 
